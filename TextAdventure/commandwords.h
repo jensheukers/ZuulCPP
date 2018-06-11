@@ -14,11 +14,13 @@ public:
 	virtual ~CommandWords();
 
 	bool isCommand(std::string);
-	void showAll() {
+	std::vector<std::string> getAll() {
+
+		std::vector<std::string> commands;
         for(int i = 0; i < validCommands.size(); i++) {
-            std::cout << validCommands[i] << " ";
+			commands.push_back(validCommands[i]);
         }
-        std::cout << std::endl;
+		return commands;
     }
 
 private:

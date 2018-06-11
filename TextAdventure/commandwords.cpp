@@ -12,6 +12,7 @@ CommandWords::CommandWords()
 	validCommands.push_back("inventory");
 	validCommands.push_back("consume");
 	validCommands.push_back("drop");
+	validCommands.push_back("clear");
 }
 
 CommandWords::~CommandWords()

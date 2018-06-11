@@ -13,7 +13,7 @@ public:
 	virtual ~Parser();
 
 	Command getCommand();
-	void showCommands() { commands.showAll(); }
+	std::vector<std::string> getCommands() { return commands.getAll(); }
 
 private:
 	CommandWords commands;

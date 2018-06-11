@@ -189,6 +189,9 @@ bool Game::processCommand(Command cmd)
 	else if (commandWord.compare("drop") == 0) {
 		this->drop(cmd);
 	}
+	else if (commandWord.compare("clear") == 0) {
+		this->clear();
+	}
 
 	return wantToQuit;
 }
@@ -206,13 +209,22 @@ void Game::printHelp()
 	std::cout << std::endl;*/
 	Writer::printLongLine();
 	Writer::printSpc();
+	Writer::printEmpty(5);
 	Writer::printLine("Your command words are:");
-	parser.showCommands();
+	std::vector<std::string> commands = parser.getCommands();
+
+	for (int i = 0; i < commands.size(); i++) {
+		Writer::printEmpty(7);
+		Writer::printText(std::to_string(i));
+		Writer::printEmpty(2);
+		Writer::printLine(commands[i]);
+	}
+
 	Writer::printLongLine();
 }
 /*
 * Clear the console.
 */
 void Game::clear() {
-
+	system("cls");
 }
