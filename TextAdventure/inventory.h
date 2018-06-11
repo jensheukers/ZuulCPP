@@ -8,6 +8,7 @@ private:
 	int weight = 0;
 	std::vector<Item*>contents;
 public:
+	std::vector<Item*> getContents();
 	Item* getItem(int index);
 	void removeItem(int index);
 	bool addItem(Item* item);

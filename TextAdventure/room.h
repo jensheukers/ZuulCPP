@@ -17,10 +17,10 @@ public:
 	void setExit(std::string direction, Room* neighbor);
 	Room* getExit(std::string direction);
 
-	std::string getLongDescription() { return "You are " + description + '\n' + getExitString(); }
+	std::string getLongDescription() { return "You are " + description; }
 	std::string getExitString();
 	Inventory* getInventory();
-	std::string getInventoryString();
+	std::vector<std::string> getInventoryItems();
 
 private:
 	std::string description;

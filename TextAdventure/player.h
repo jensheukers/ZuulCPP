@@ -7,7 +7,6 @@ public:
 	Room* getCurrentRoom();
 	Room* setCurrentRoom(Room* room);
 	Inventory* getInventory();
-	std::string getInventoryString();
 private:
 	Inventory* inventory = new Inventory();
 	bool Fighting = false;

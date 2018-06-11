@@ -71,7 +71,10 @@ void Game::goRoom(Command cmd)
 		//See if player has enough health left
 		if (player.isAlive()) {
 			player.setCurrentRoom(nextRoom);
-			std::cout << player.getCurrentRoom()->getLongDescription() << std::endl;
+			Writer::printLongLine();
+			Writer::printSpc();
+			Writer::printLine(player.getCurrentRoom()->getLongDescription());
+			Writer::printLongLine();
 			return;
 		}
 		else if(!player.isAlive()){
@@ -84,7 +87,11 @@ void Game::goRoom(Command cmd)
 void Game::grab(Command cmd) {
 	if (!cmd.hasSecondWord()) {
 		// if there is no second word, we don't know what to grab...
-		std::cout << "Grab what?" << std::endl;
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
+		Writer::printLine("I dont know what to grab..");
+		Writer::printLongLine();
 		return;
 	}
 
@@ -93,7 +100,12 @@ void Game::grab(Command cmd) {
 			//Grab the item
 			if (player.getInventory()->addItem(player.getCurrentRoom()->getInventory()->getItem(i))) {
 				player.getCurrentRoom()->getInventory()->removeItem(i);
-				std::cout << "Grabbed a " << cmd.getSecondWord() << std::endl;
+
+				Writer::printLongLine();
+				Writer::printSpc();
+				Writer::printEmpty(5);
+				Writer::printLine(Writer::append("You grabbed a: ", cmd.getSecondWord()));
+				Writer::printLongLine();
 			}
 			return;
 		}
@@ -108,7 +120,8 @@ void Game::consume(Command cmd) {
 	Writer::printSpc();
 	if (!cmd.hasSecondWord()) {
 		// if there is no second word, we don't know what to consume...
-		std::cout << "Consume what?" << std::endl;
+		Writer::printEmpty(5);
+		Writer::printLine("I dont know what to consume");
 		Writer::printLongLine();
 		return;
 	}
@@ -137,7 +150,11 @@ void Game::consume(Command cmd) {
 void Game::drop(Command cmd) {
 	if (!cmd.hasSecondWord()) {
 		// if there is no second word, we don't know what to drop...
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
 		Writer::printLine("drop what?");
+		Writer::printLongLine();
 		return;
 	}
 
@@ -145,7 +162,12 @@ void Game::drop(Command cmd) {
 		if (cmd.getSecondWord() == player.getInventory()->getItem(i)->getItemName()) {
 			player.getCurrentRoom()->getInventory()->addItem(player.getInventory()->getItem(i));
 			player.getInventory()->removeItem(i);
+
+			Writer::printLongLine();
+			Writer::printSpc();
+			Writer::printEmpty(5);
 			Writer::printLine(Writer::append("Dropped: ", cmd.getSecondWord()));
+			Writer::printLongLine();
 			return;
 		}
 	}
@@ -172,16 +194,63 @@ bool Game::processCommand(Command cmd)
 		//wantToQuit = quit(command);
 		wantToQuit = true;
 	} 
-	else if (commandWord.compare("look") == 0) {
+	else if (commandWord.compare("look") == 0) {	
+		std::vector<std::string> items = player.getCurrentRoom()->getInventoryItems();
+
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
+		Writer::printLine("Room Description:");
+		Writer::printEmpty(7);
 		Writer::printLine(player.getCurrentRoom()->getLongDescription());
-		Writer::printLine(player.getCurrentRoom()->getInventoryString());
+		Writer::printEmpty(7);
+		Writer::printLine(player.getCurrentRoom()->getExitString());
+
+		if (items.size() != 0) {
+			Writer::printSpc();
+			Writer::printEmpty(5);
+			Writer::printLine("These Items are found in the room:");
+
+			for (int i = 0; i < items.size(); i++) {
+				Writer::printEmpty(7);
+				Writer::printText(std::to_string(i));
+				Writer::printEmpty(2);
+				Writer::printLine(items[i]);
+			}
+
+			Writer::printLongLine();
+		}
+		else {
+			Writer::printSpc();
+			Writer::printEmpty(5);
+			Writer::printLine("There are no Items in this room!");
+			Writer::printLongLine();
+		}
 	}
 	else if (commandWord.compare("grab") == 0) {
 		this->grab(cmd);
 	}
 	else if (commandWord.compare("inventory") == 0) {
+		std::vector<Item*> invItems = player.getInventory()->getContents();
+
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
 		std::cout << "Weight: " << player.getInventory()->getWeight() << "/" << player.getInventory()->getMaxWeight() << std::endl;
-		std::cout << player.getInventoryString() << std::endl;
+		Writer::printSpc();
+		Writer::printEmpty(5);
+		Writer::printLine("Inventory:");
+
+		for (int i = 0; i < invItems.size(); i++) {
+			Writer::printEmpty(7);
+			Writer::printText(std::to_string(i));
+			Writer::printEmpty(2);
+			Writer::printLine(invItems[i]->getItemName());
+		}
+
+
+		Writer::printLongLine();
+	
 	}
 	else if (commandWord.compare("consume") == 0) {
 		this->consume(cmd);
@@ -199,7 +268,14 @@ bool Game::processCommand(Command cmd)
 void Game::printWelcome()
 {
 	std::cout << std::endl;
+	Writer::printLongLine();
+	Writer::printSpc();
+	Writer::printEmpty(5);
+	Writer::printLine("Welcome to GAMENAME, type help for commands...");
+	Writer::printSpc();
+	Writer::printEmpty(5);
 	Writer::printLine(player.getCurrentRoom()->getLongDescription());
+	Writer::printLongLine();
 }
 
 void Game::printHelp()

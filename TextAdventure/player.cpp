@@ -10,18 +10,6 @@ Room* Player::setCurrentRoom(Room* room) {
 	return this->currentRoom;
 }
 
-std::string Player::getInventoryString()
-{
-	std::string returnString = "Items: ";
-
-	for (int i = 0; i < this->inventory->getSize(); i++) {
-		returnString.append(this->inventory->getItem(i)->getItemName());
-		returnString.append(", ");
-	}
-
-	return returnString;
-}
-
 Inventory* Player::getInventory() {
 	return this->inventory;
 }

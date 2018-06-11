@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "inventory.h"
 
+std::vector<Item*> Inventory::getContents() {
+	return this->contents;
+}
+
 Item* Inventory::getItem(int index) {
 	return this->contents[index];
 }

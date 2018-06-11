@@ -1,6 +1,7 @@
 // room.cpp
 #include "stdafx.h"
 #include "room.h"
+#include "writer.h"
 
 Room::Room(std::string desc)
 {
@@ -38,16 +39,15 @@ std::string Room::getExitString()
 	return returnString;
 }
 
-std::string Room::getInventoryString()
+std::vector<std::string> Room::getInventoryItems()
 {
-	std::string returnString = "Items: ";
+	std::vector<std::string> invItems;
 	
 	for (int i = 0; i < this->inventory->getSize(); i++) {
-		returnString.append(this->inventory->getItem(i)->getItemName());
-		returnString.append(", ");
+		invItems.push_back(this->inventory->getItem(i)->getItemName());
 	}
 
-	return returnString;
+	return invItems;
 }
 
 Inventory* Room::getInventory() {
