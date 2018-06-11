@@ -57,6 +57,9 @@
     <ClInclude Include="healthpotion.h">
       <Filter>Source Files\Items</Filter>
     </ClInclude>
+    <ClInclude Include="writer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -90,6 +93,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="writer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

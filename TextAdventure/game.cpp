@@ -49,7 +49,6 @@ void Game::play()
 		Command command = parser.getCommand();
 		finished = processCommand(command);
 	}
-	std::cout << "Thank you for playing. Goodbye!" << std::endl;
 }
 
 void Game::goRoom(Command cmd)
@@ -105,9 +104,12 @@ void Game::grab(Command cmd) {
 }
 
 void Game::consume(Command cmd) {
+	Writer::printLongLine();
+	Writer::printSpc();
 	if (!cmd.hasSecondWord()) {
 		// if there is no second word, we don't know what to consume...
 		std::cout << "Consume what?" << std::endl;
+		Writer::printLongLine();
 		return;
 	}
 
@@ -116,24 +118,26 @@ void Game::consume(Command cmd) {
 			if (player.getInventory()->getItem(i)->getItemName() == "HealthPotion") {
 				int oldHealth = player.getHealth();
 				player.heal(20);
-				std::cout << "You drank a Health Potion" << std::endl;
-				std::cout << "Health: " << oldHealth << " >> " << player.getHealth() << std::endl;
+				Writer::printLine("You drank a Health Potion");
+				Writer::printSpc();
+				Writer::printLine(Writer::append(Writer::append("Health: ", std::to_string(oldHealth)), Writer::append(" >> ", std::to_string(player.getHealth()))));
 				player.getInventory()->removeItem(i);
 			}
 			else {
-				std::cout << "You cant consume that Item" << std::endl;
+				Writer::printLine("You cant consume that Item");
 			}
 			return;
 		}
 	}
 
-	std::cout << "You dont have that consumable" << std::endl;
+	Writer::printLine("You dont have that consumable");
+	Writer::printLongLine();
 }
 
 void Game::drop(Command cmd) {
 	if (!cmd.hasSecondWord()) {
 		// if there is no second word, we don't know what to drop...
-		std::cout << "drop what?" << std::endl;
+		Writer::printLine("drop what?");
 		return;
 	}
 
@@ -141,11 +145,11 @@ void Game::drop(Command cmd) {
 		if (cmd.getSecondWord() == player.getInventory()->getItem(i)->getItemName()) {
 			player.getCurrentRoom()->getInventory()->addItem(player.getInventory()->getItem(i));
 			player.getInventory()->removeItem(i);
-			std::cout << "Dropped: " << cmd.getSecondWord() << std::endl;
+			Writer::printLine(Writer::append("Dropped: ", cmd.getSecondWord()));
 			return;
 		}
 	}
-	std::cout << "You dont have that Item" << std::endl;
+	Writer::printLine("You dont have that Item");
 	return;
 }
 
@@ -154,7 +158,7 @@ bool Game::processCommand(Command cmd)
 	bool wantToQuit = false;
 
 	if(cmd.isUnknown()) {
-		std::cout << "I don't know what you mean..." << std::endl;
+		Writer::printLine("I don't know what you mean...");
 		return false;
 	}
 
@@ -169,8 +173,8 @@ bool Game::processCommand(Command cmd)
 		wantToQuit = true;
 	} 
 	else if (commandWord.compare("look") == 0) {
-		std::cout << player.getCurrentRoom()->getLongDescription() << std::endl;
-		std::cout << player.getCurrentRoom()->getInventoryString() << std::endl;
+		Writer::printLine(player.getCurrentRoom()->getLongDescription());
+		Writer::printLine(player.getCurrentRoom()->getInventoryString());
 	}
 	else if (commandWord.compare("grab") == 0) {
 		this->grab(cmd);
@@ -192,11 +196,7 @@ bool Game::processCommand(Command cmd)
 void Game::printWelcome()
 {
 	std::cout << std::endl;
-	std::cout << "Welcome my dear user...." << std::endl;
-	std::cout << "You have arrived in a magical world" << std::endl;
-	std::cout << "Type 'help' if you need help." << std::endl;
-	std::cout << std::endl;
-	std::cout << player.getCurrentRoom()->getLongDescription() << std::endl;
+	Writer::printLine(player.getCurrentRoom()->getLongDescription());
 }
 
 void Game::printHelp()
@@ -204,6 +204,15 @@ void Game::printHelp()
 	/*std::cout << "You are lost. You are alone. You wander" << std::endl;
 	std::cout << "around at the university." << std::endl;
 	std::cout << std::endl;*/
-	std::cout << "Your command words are:" << std::endl;
+	Writer::printLongLine();
+	Writer::printSpc();
+	Writer::printLine("Your command words are:");
 	parser.showCommands();
+	Writer::printLongLine();
+}
+/*
+* Clear the console.
+*/
+void Game::clear() {
+
 }

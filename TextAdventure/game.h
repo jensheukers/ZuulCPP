@@ -9,6 +9,7 @@
 #include "command.h"
 #include "room.h"
 #include "player.h"
+#include "writer.h"
 
 class Game
 {
@@ -27,6 +28,7 @@ private:
 	bool processCommand(Command cmd);
 	void printWelcome();
 	void printHelp();
+	void clear();
 
 	Parser parser;
 	Player player;
