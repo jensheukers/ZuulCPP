@@ -27,7 +27,12 @@ void Game::createRooms()
 
 	destroyedBaseBasement->setExit("up",destroyedBase);
 
+	//Lock the rooms that need to be locked
+	destroyedBaseBasement->setRequiredKey(new Item());
+	destroyedBaseBasement->setLock(true);
+
 	//Set room Inventory
+	destroyedBase->getInventory()->addItem(new Item());
 	destroyedBaseBasement->getInventory()->addItem(new Item());
 	destroyedBaseBasement->getInventory()->addItem(new Item());
 	destroyedBaseBasement->getInventory()->addItem(new HealthPotion());
@@ -65,22 +70,46 @@ void Game::goRoom(Command cmd)
 	Room* nextRoom = player.getCurrentRoom()->getExit(direction);
 
 	if (nextRoom == NULL) {
-		std::cout << "There is no door!" << std::endl;
-	} else {
-
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
+		Writer::printLine("There is no door!");
+		Writer::printLongLine();
+	}
+	else {
 		//See if player has enough health left
 		if (player.isAlive()) {
-			player.setCurrentRoom(nextRoom);
-			Writer::printLongLine();
-			Writer::printSpc();
-			Writer::printLine(player.getCurrentRoom()->getLongDescription());
-			Writer::printLongLine();
-			return;
+			if (nextRoom->getLockState()) {
+				if (!player.hasItem(nextRoom->getKey())) {
+					Writer::printLongLine();
+					Writer::printSpc();
+					Writer::printEmpty(5);
+					Writer::printLine("That room is locked!");
+					Writer::printEmpty(5);
+					Writer::printLine(Writer::append("You require a : ", nextRoom->getKeyName()));
+					Writer::printLongLine();
+					return;
+				}
+				else {
+					nextRoom->setLock(false);
+					Writer::printLongLine();
+					Writer::printSpc();
+					Writer::printLine("You have unlocked a room!");
+					Writer::printLongLine();
+				}
+			}
 		}
 		else if(!player.isAlive()){
 			std::cout << "Player has died!" << std::endl;
 			return;
 		}
+
+		player.setCurrentRoom(nextRoom);
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printLine(player.getCurrentRoom()->getLongDescription());
+		Writer::printLongLine();
+		return;
 	}
 }
 
@@ -95,8 +124,13 @@ void Game::grab(Command cmd) {
 		return;
 	}
 
+
+	//Determine if user typed a integer
+	std::string secondTypeWord;
+
+	secondTypeWord = cmd.getSecondWord();
 	for (int i = 0; i < player.getCurrentRoom()->getInventory()->getSize(); i++) {
-		if (cmd.getSecondWord() == player.getCurrentRoom()->getInventory()->getItem(i)->getItemName()) {
+		if (secondTypeWord == player.getCurrentRoom()->getInventory()->getItem(i)->getItemName()) {
 			//Grab the item
 			if (player.getInventory()->addItem(player.getCurrentRoom()->getInventory()->getItem(i))) {
 				player.getCurrentRoom()->getInventory()->removeItem(i);
@@ -125,6 +159,7 @@ void Game::consume(Command cmd) {
 		Writer::printLongLine();
 		return;
 	}
+
 
 	for (int i = 0; i < player.getInventory()->getSize(); i++) {
 		if (cmd.getSecondWord() == player.getInventory()->getItem(i)->getItemName()) {
@@ -217,7 +252,9 @@ bool Game::processCommand(Command cmd)
 				Writer::printEmpty(2);
 				Writer::printLine(items[i]);
 			}
-
+			Writer::printSpc();
+			Writer::printEmpty(5);
+			Writer::printLine("-Type the name of the Item to grab!");
 			Writer::printLongLine();
 		}
 		else {

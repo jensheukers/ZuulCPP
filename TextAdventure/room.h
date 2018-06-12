@@ -21,8 +21,16 @@ public:
 	std::string getExitString();
 	Inventory* getInventory();
 	std::vector<std::string> getInventoryItems();
+	void setLock(bool state);
+	void setRequiredKey(Item* key);
+	void unlock(Item* keyItem);
+	bool getLockState();
+	std::string getKeyName();
+	Item* getKey();
 
 private:
+	bool locked = false;
+	Item* requiredKey = new Item();
 	std::string description;
 	std::map<std::string, Room*> exits;
 	Inventory* inventory = new Inventory();

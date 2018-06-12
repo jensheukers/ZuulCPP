@@ -53,3 +53,32 @@ std::vector<std::string> Room::getInventoryItems()
 Inventory* Room::getInventory() {
 	return this->inventory;
 }
+
+void Room::setLock(bool state) {
+	this->locked = state;
+}
+
+void Room::setRequiredKey(Item* key) {
+	this->requiredKey = key;
+}
+
+void Room::unlock(Item* keyItem) {
+	if (keyItem->getItemName() == this->requiredKey->getItemName()) {
+		setLock(false);
+	}
+}
+
+bool Room::getLockState() {
+	if (this->locked) {
+		return true;
+	}
+	return false;
+}
+
+std::string Room::getKeyName() {
+	return this->requiredKey->getItemName();
+}
+
+Item* Room::getKey() {
+	return this->requiredKey;
+}

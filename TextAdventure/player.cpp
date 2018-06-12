@@ -13,3 +13,12 @@ Room* Player::setCurrentRoom(Room* room) {
 Inventory* Player::getInventory() {
 	return this->inventory;
 }
+
+bool Player::hasItem(Item* item) {
+	for (int i = 0; i < this->getInventory()->getSize(); i++) {
+		if (item->getItemName() == this->getInventory()->getItem(i)->getItemName()) {
+			return true;
+		}
+	}
+	return false;
+}
