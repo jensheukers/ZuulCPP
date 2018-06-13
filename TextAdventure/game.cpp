@@ -173,6 +173,7 @@ void Game::consume(Command cmd) {
 			}
 			else {
 				Writer::printLine("You cant consume that Item");
+				Writer::printLongLine();
 			}
 			return;
 		}
@@ -254,7 +255,7 @@ bool Game::processCommand(Command cmd)
 			}
 			Writer::printSpc();
 			Writer::printEmpty(5);
-			Writer::printLine("-Type the name of the Item to grab!");
+			Writer::printLine("-Type grab then the name of the Item to grab!");
 			Writer::printLongLine();
 		}
 		else {
