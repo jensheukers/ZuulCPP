@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include <iostream>
 #include <string>
-#include "healthpotion.h"
 #include "game.h"
 
 Game::Game()
@@ -28,11 +27,11 @@ void Game::createRooms()
 	destroyedBaseBasement->setExit("up",destroyedBase);
 
 	//Lock the rooms that need to be locked
-	destroyedBaseBasement->setRequiredKey(new Item());
+	destroyedBaseBasement->setRequiredKey(new Key());
 	destroyedBaseBasement->setLock(true);
 
 	//Set room Inventory
-	destroyedBase->getInventory()->addItem(new Item());
+	destroyedBase->getInventory()->addItem(new Key());
 	destroyedBaseBasement->getInventory()->addItem(new Item());
 	destroyedBaseBasement->getInventory()->addItem(new Item());
 	destroyedBaseBasement->getInventory()->addItem(new HealthPotion());

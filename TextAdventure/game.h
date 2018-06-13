@@ -10,6 +10,7 @@
 #include "room.h"
 #include "player.h"
 #include "writer.h"
+#include "items.h"
 
 class Game
 {
