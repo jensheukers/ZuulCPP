@@ -20,20 +20,22 @@ void Game::createRooms()
 	// create the rooms
 	destroyedBase = new Room("in a destroyed military base in the jungle.");
 	destroyedBaseBasement = new Room("in the basement of the military base.");
+	destroyedOutside = new Room("outside the destroyed military base");
 
 	// initialise room exits
 	destroyedBase->setExit("down",destroyedBaseBasement);
+	destroyedBase->setExit("left",destroyedOutside);
 
 	destroyedBaseBasement->setExit("up",destroyedBase);
 
+	destroyedOutside->setExit("right",destroyedBase);
+
 	//Lock the rooms that need to be locked
-	destroyedBaseBasement->setRequiredKey(new Key());
-	destroyedBaseBasement->setLock(true);
+	destroyedOutside->setRequiredKey(new Key());
+	destroyedOutside->setLock(true);
 
 	//Set room Inventory
-	destroyedBase->getInventory()->addItem(new Key());
-	destroyedBaseBasement->getInventory()->addItem(new Item());
-	destroyedBaseBasement->getInventory()->addItem(new Item());
+	destroyedBaseBasement->getInventory()->addItem(new Key());
 	destroyedBaseBasement->getInventory()->addItem(new HealthPotion());
 
 	this->player.setCurrentRoom(destroyedBase);  // start game outside
@@ -341,3 +343,38 @@ void Game::printHelp()
 void Game::clear() {
 	system("cls");
 }
+/*
+void Game::attack(Command cmd) {
+	if (player.getCurrentRoom()->hasEnemy()) {
+		if (!cmd.hasSecondWord()) {
+			// if there is no second word, we don't know what to use as a weapon...
+			Writer::printLongLine();
+			Writer::printSpc();
+			Writer::printEmpty(5);
+			Writer::printLine("What weapon should we use?");
+			Writer::printLongLine();
+			return;
+		}
+		std::string weaponString = cmd.getSecondWord();
+		
+		//Check the inventory for the weapon
+
+		for (int i = 0; i < player.getInventory()->getSize(); i++) {
+			if (player.getInventory()->getItem(i)->getItemName() == weaponString) {
+				Item* weapon = player.getInventory()->getItem(i);
+			}
+		}
+	}
+	else {
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
+		Writer::printLine("There is nothing to attack!");
+		Writer::printLongLine();
+	}
+}
+
+void Game::counterAttack() {
+
+}
+*/

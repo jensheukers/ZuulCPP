@@ -30,11 +30,14 @@ private:
 	void printWelcome();
 	void printHelp();
 	void clear();
+	void attack(Command cmd);
+	void counterAttack();
 
 	Parser parser;
 	Player player;
 
 	Room* destroyedBase;
+	Room* destroyedOutside;
 	Room* destroyedBaseBasement;
 };
 

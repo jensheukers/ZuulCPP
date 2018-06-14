@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include "inventory.h"
+#include "entity.h"
 
 class Room
 {
@@ -27,10 +28,16 @@ public:
 	bool getLockState();
 	std::string getKeyName();
 	Item* getKey();
+	
+	void setEnemy(Entity* enemy);
+	Entity* getEnemy();
+	bool hasEnemy();
 
 private:
 	bool locked = false;
+	bool hasEnemyActive = false;
 	Item* requiredKey = new Item();
+	Entity* enemy = new Entity();
 	std::string description;
 	std::map<std::string, Room*> exits;
 	Inventory* inventory = new Inventory();

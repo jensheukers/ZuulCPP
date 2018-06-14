@@ -82,3 +82,15 @@ std::string Room::getKeyName() {
 Item* Room::getKey() {
 	return this->requiredKey;
 }
+
+void Room::setEnemy(Entity* enemy) {
+	this->enemy = enemy;
+}
+
+bool Room::hasEnemy() {
+	return this->hasEnemyActive;
+}
+
+Entity* Room::getEnemy() {
+	return this->enemy;
+}
