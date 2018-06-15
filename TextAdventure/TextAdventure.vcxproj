@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="command.h" />
     <ClInclude Include="commandwords.h" />
+    <ClInclude Include="enemys.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="healthpotion.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="key.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="roamer.h" />
     <ClInclude Include="room.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="sword.h" />

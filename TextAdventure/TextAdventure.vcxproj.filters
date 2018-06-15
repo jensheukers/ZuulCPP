@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Items">
       <UniqueIdentifier>{d8b7e608-fe32-4fc1-8740-254eeda75834}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\enemys">
+      <UniqueIdentifier>{67856be9-9231-493b-baf0-c6c5edcd7f4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -71,6 +74,12 @@
     </ClInclude>
     <ClInclude Include="sword.h">
       <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="enemys.h">
+      <Filter>Header Files\enemys</Filter>
+    </ClInclude>
+    <ClInclude Include="roamer.h">
+      <Filter>Header Files\enemys</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

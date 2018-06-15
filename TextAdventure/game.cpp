@@ -40,7 +40,7 @@ void Game::createRooms()
 	destroyedBase->getInventory()->addItem(new Sword());
 
 	//Set room enemy's
-	destroyedBaseBasement->setEnemy(new Entity());
+	destroyedBaseBasement->setEnemy(new Roamer());
 
 	this->player.setCurrentRoom(destroyedBase);  // start game outside
 
@@ -137,6 +137,15 @@ void Game::goRoom(Command cmd)
 }
 
 void Game::grab(Command cmd) {
+	if (player.getCurrentRoom()->hasEnemy()) {
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
+		Writer::printLine("You have to eliminate your enemy first!");
+		Writer::printLongLine();
+		return;
+	}
+
 	if (!cmd.hasSecondWord()) {
 		Writer::printLongLine();
 		Writer::printSpc();
@@ -264,11 +273,6 @@ bool Game::processCommand(Command cmd)
 
 	std::string commandWord = cmd.getCommandWord();
 
-	//If player is fighting a enemy, let the enmy do a strike
-	if (player.getCurrentRoom()->hasEnemy()) {
-		this->counterAttack();
-	}
-
 	if (commandWord.compare("help") == 0) {
 		this->printHelp();
 	} else if (commandWord.compare("go") == 0) {
@@ -348,6 +352,10 @@ bool Game::processCommand(Command cmd)
 	}
 	else if (commandWord.compare("attack") == 0) {
 		this->attack(cmd);
+		//If player is fighting a enemy, let the enmy do a strike
+		if (player.getCurrentRoom()->hasEnemy()) {
+			this->counterAttack();
+		}
 	}
 
 	return wantToQuit;
@@ -396,33 +404,55 @@ void Game::clear() {
 void Game::attack(Command cmd) {
 	if (player.getCurrentRoom()->hasEnemy()) {
 		if (!cmd.hasSecondWord()) {
-			// if there is no second word, we don't know what to use as a weapon...
+			// if there is no second word, we use fists
+			player.attack(player.getCurrentRoom()->getEnemy(), 5);
 			Writer::printLongLine();
 			Writer::printSpc();
 			Writer::printEmpty(5);
-			Writer::printLine("What weapon should we use?");
+			Writer::printLine("You punched the enemy in his face");
+			Writer::printSpc();
+			Writer::printEmpty(5);
+			Writer::printLine("You have dealt: 5");
+			Writer::printEmpty(5);
+			Writer::printLine(Writer::append("Your Health: ", std::to_string(player.getHealth())));
+			Writer::printEmpty(5);
+			Writer::printLine(Writer::append("Enemy Health: ", std::to_string(player.getCurrentRoom()->getEnemy()->getHealth())));
 			Writer::printLongLine();
-			return;
 		}
-		std::string weaponString = cmd.getSecondWord();
-		
-		//Check the inventory for the weapon
+		else {
+			std::string weaponString = cmd.getSecondWord();
 
-		for (int i = 0; i < player.getInventory()->getSize(); i++) {
-			if (player.getInventory()->getItem(i)->getItemName() == weaponString) {		
-				Weapon* sword = dynamic_cast<Weapon*>(player.getInventory()->getItem(i));
-				player.attack(player.getCurrentRoom()->getEnemy(),sword->getAttackDamage());
+			//Check the inventory for the weapon
+			bool weaponFound = false;
+			for (int i = 0; i < player.getInventory()->getSize(); i++) {
+				if (player.getInventory()->getItem(i)->getItemName() == weaponString) {
+					Weapon* sword = dynamic_cast<Weapon*>(player.getInventory()->getItem(i));
+					player.attack(player.getCurrentRoom()->getEnemy(), sword->getAttackDamage());
+					Writer::printLongLine();
+					Writer::printSpc();
+					Writer::printEmpty(5);
+					Writer::printLine(sword->getRandomAttackPhrase());
+					Writer::printSpc();
+					Writer::printEmpty(5);
+					Writer::printLine(Writer::append("You have dealt: ", std::to_string(sword->getAttackDamage())));
+					Writer::printEmpty(5);
+					Writer::printLine(Writer::append("Your Health: ", std::to_string(player.getHealth())));
+					Writer::printEmpty(5);
+					Writer::printLine(Writer::append("Enemy Health: ", std::to_string(player.getCurrentRoom()->getEnemy()->getHealth())));
+					Writer::printLongLine();
+					weaponFound = true;
+				}
+			}
+
+			if (!weaponFound) {
 				Writer::printLongLine();
 				Writer::printSpc();
 				Writer::printEmpty(5);
-				Writer::printLine(Writer::append("You have dealt: ", std::to_string(sword->getAttackDamage())));
-				Writer::printEmpty(5);
-				Writer::printLine(Writer::append("Your Health: ", std::to_string(player.getHealth())));
-				Writer::printEmpty(5);
-				Writer::printLine(Writer::append("Enemy Health: ", std::to_string(player.getCurrentRoom()->getEnemy()->getHealth())));
+				Writer::printLine("You dont have that weapon!");
 				Writer::printLongLine();
 			}
 		}
+		
 
 		if (!player.getCurrentRoom()->getEnemy()->isAlive()) {
 			Writer::printLongLine();
@@ -446,7 +476,7 @@ void Game::attack(Command cmd) {
 }
 
 void Game::counterAttack() {
-	int damage = 10;
+	int damage = rand() % player.getCurrentRoom()->getEnemy()->getMaxDamage() + player.getCurrentRoom()->getEnemy()->getMinDamage();
 	player.getCurrentRoom()->getEnemy()->attack(&this->player, damage);
 
 	Writer::printLongLine();

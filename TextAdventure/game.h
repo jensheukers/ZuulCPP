@@ -11,6 +11,7 @@
 #include "player.h"
 #include "writer.h"
 #include "items.h"
+#include "enemys.h"
 
 class Game
 {
