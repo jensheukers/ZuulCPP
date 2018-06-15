@@ -81,6 +81,9 @@
     <ClInclude Include="roamer.h">
       <Filter>Header Files\enemys</Filter>
     </ClInclude>
+    <ClInclude Include="guard.h">
+      <Filter>Header Files\enemys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

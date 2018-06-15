@@ -37,9 +37,9 @@ private:
 	Parser parser;
 	Player player;
 
-	Room* destroyedBase;
-	Room* destroyedOutside;
-	Room* destroyedBaseBasement;
+	Room* prisonCell;
+	Room* prisonCellBlock;
+	Room* prisonCellUnder;
 };
 
 #endif /* GAME_H */

@@ -152,6 +152,7 @@
     <ClInclude Include="enemys.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="guard.h" />
     <ClInclude Include="healthpotion.h" />
     <ClInclude Include="inventory.h" />
     <ClInclude Include="item.h" />

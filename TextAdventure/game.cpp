@@ -18,31 +18,32 @@ Game::~Game()
 void Game::createRooms()
 {
 	// create the rooms
-	destroyedBase = new Room("in a destroyed military base in the jungle.");
-	destroyedBaseBasement = new Room("in the basement of the military base.");
-	destroyedOutside = new Room("outside the destroyed military base");
+	prisonCell = new Room("in your prison cell.");
+	prisonCellBlock = new Room("in the prison block hall");
+	prisonCellUnder = new Room("in a room underneath your prison bed");
 
 	// initialise room exits
-	destroyedBase->setExit("down",destroyedBaseBasement);
-	destroyedBase->setExit("left",destroyedOutside);
+	prisonCell->setExit("down", prisonCellUnder);
+	prisonCell->setExit("left", prisonCellBlock);
 
-	destroyedBaseBasement->setExit("up",destroyedBase);
+	prisonCellUnder->setExit("up", prisonCell);
 
-	destroyedOutside->setExit("right",destroyedBase);
+	prisonCellBlock->setExit("right", prisonCell);
 
 	//Lock the rooms that need to be locked
-	destroyedOutside->setRequiredKey(new Key());
-	destroyedOutside->setLock(true);
+	prisonCellBlock->setRequiredKey(new Key());
+	prisonCellBlock->setLock(true);
 
 	//Set room Inventory
-	destroyedBaseBasement->getInventory()->addItem(new Key());
-	destroyedBaseBasement->getInventory()->addItem(new HealthPotion());
-	destroyedBase->getInventory()->addItem(new Sword());
+	prisonCellUnder->getInventory()->addItem(new Key());
+	prisonCellUnder->getInventory()->addItem(new HealthPotion());
+	prisonCell->getInventory()->addItem(new Sword());
 
 	//Set room enemy's
-	destroyedBaseBasement->setEnemy(new Roamer());
+	prisonCellUnder->setEnemy(new Roamer());
+	prisonCellBlock->setEnemy(new Guard());
 
-	this->player.setCurrentRoom(destroyedBase);  // start game outside
+	this->player.setCurrentRoom(prisonCell);  // start game outside
 
 	
 }
@@ -150,9 +151,11 @@ void Game::grab(Command cmd) {
 		Writer::printLongLine();
 		Writer::printSpc();
 		for (int i = 0; i < player.getCurrentRoom()->getInventory()->getSize(); i++) {
-			player.getInventory()->addItem(player.getCurrentRoom()->getInventory()->getItem(i));
-			Writer::printEmpty(5);
-			Writer::printLine(Writer::append("You grabbed a: ", player.getCurrentRoom()->getInventory()->getItem(i)->getItemName()));	
+			if (player.getInventory()->addItem(player.getCurrentRoom()->getInventory()->getItem(i))) {
+				Writer::printEmpty(5);
+				Writer::printLine(Writer::append("You grabbed a: ", player.getCurrentRoom()->getInventory()->getItem(i)->getItemName()));
+				player.getCurrentRoom()->getInventory()->removeItem(i);
+			}
 		}
 		Writer::printLongLine();
 		return;
@@ -367,7 +370,10 @@ void Game::printWelcome()
 	Writer::printLongLine();
 	Writer::printSpc();
 	Writer::printEmpty(5);
-	Writer::printLine("Welcome to GAMENAME, type help for commands...");
+	Writer::printLine("Welcome to JailBreak, type help for commands...");
+	Writer::printSpc();
+	Writer::printEmpty(5);
+	Writer::printLine("You are locked in a cel, you have to break out and kill the warden...");
 	Writer::printSpc();
 	Writer::printEmpty(5);
 	Writer::printLine(player.getCurrentRoom()->getLongDescription());
