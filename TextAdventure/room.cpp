@@ -85,6 +85,7 @@ Item* Room::getKey() {
 
 void Room::setEnemy(Entity* enemy) {
 	this->enemy = enemy;
+	this->hasEnemyActive = true;
 }
 
 bool Room::hasEnemy() {
@@ -93,4 +94,11 @@ bool Room::hasEnemy() {
 
 Entity* Room::getEnemy() {
 	return this->enemy;
+}
+
+void Room::killCurrentEnemy() {
+	if (hasEnemyActive) {
+		this->enemy = nullptr;
+		this->hasEnemyActive = false;
+	}
 }

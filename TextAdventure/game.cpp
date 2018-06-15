@@ -37,6 +37,10 @@ void Game::createRooms()
 	//Set room Inventory
 	destroyedBaseBasement->getInventory()->addItem(new Key());
 	destroyedBaseBasement->getInventory()->addItem(new HealthPotion());
+	destroyedBase->getInventory()->addItem(new Sword());
+
+	//Set room enemy's
+	destroyedBaseBasement->setEnemy(new Entity());
 
 	this->player.setCurrentRoom(destroyedBase);  // start game outside
 
@@ -59,6 +63,14 @@ void Game::play()
 
 void Game::goRoom(Command cmd)
 {
+	if (player.getCurrentRoom()->hasEnemy()) {
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
+		Writer::printLine("You have to eliminate your enemy first!");
+		Writer::printLongLine();
+		return;
+	}
 	if(!cmd.hasSecondWord()) {
 		// if there is no second word, we don't know where to go...
 		std::cout << "Go where?" << std::endl;
@@ -95,6 +107,7 @@ void Game::goRoom(Command cmd)
 					nextRoom->setLock(false);
 					Writer::printLongLine();
 					Writer::printSpc();
+					Writer::printEmpty(5);
 					Writer::printLine("You have unlocked a room!");
 					Writer::printLongLine();
 				}
@@ -108,7 +121,16 @@ void Game::goRoom(Command cmd)
 		player.setCurrentRoom(nextRoom);
 		Writer::printLongLine();
 		Writer::printSpc();
+		Writer::printEmpty(5);
 		Writer::printLine(player.getCurrentRoom()->getLongDescription());
+
+		if (player.getCurrentRoom()->hasEnemy()) {
+			Writer::printEmpty(5);
+			Writer::printLine(Writer::append("There is a: ", player.getCurrentRoom()->getEnemy()->getName()));
+			Writer::printEmpty(5);
+			Writer::printLine("You have to defeat it before you can continue");
+		}
+
 		Writer::printLongLine();
 		return;
 	}
@@ -216,12 +238,26 @@ bool Game::processCommand(Command cmd)
 {
 	bool wantToQuit = false;
 
+	if (!player.isAlive()) {
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
+		Writer::printLine("Player has died!");
+		Writer::printLongLine();
+		return wantToQuit;
+	}
+
 	if(cmd.isUnknown()) {
 		Writer::printLine("I don't know what you mean...");
 		return false;
 	}
 
 	std::string commandWord = cmd.getCommandWord();
+
+	//If player is fighting a enemy, let the enmy do a strike
+	if (player.getCurrentRoom()->hasEnemy()) {
+		this->counterAttack();
+	}
 
 	if (commandWord.compare("help") == 0) {
 		this->printHelp();
@@ -300,6 +336,9 @@ bool Game::processCommand(Command cmd)
 	else if (commandWord.compare("clear") == 0) {
 		this->clear();
 	}
+	else if (commandWord.compare("attack") == 0) {
+		this->attack(cmd);
+	}
 
 	return wantToQuit;
 }
@@ -343,7 +382,7 @@ void Game::printHelp()
 void Game::clear() {
 	system("cls");
 }
-/*
+
 void Game::attack(Command cmd) {
 	if (player.getCurrentRoom()->hasEnemy()) {
 		if (!cmd.hasSecondWord()) {
@@ -360,9 +399,31 @@ void Game::attack(Command cmd) {
 		//Check the inventory for the weapon
 
 		for (int i = 0; i < player.getInventory()->getSize(); i++) {
-			if (player.getInventory()->getItem(i)->getItemName() == weaponString) {
-				Item* weapon = player.getInventory()->getItem(i);
+			if (player.getInventory()->getItem(i)->getItemName() == weaponString) {		
+				Weapon* sword = dynamic_cast<Weapon*>(player.getInventory()->getItem(i));
+				player.attack(player.getCurrentRoom()->getEnemy(),sword->getAttackDamage());
+				Writer::printLongLine();
+				Writer::printSpc();
+				Writer::printEmpty(5);
+				Writer::printLine(Writer::append("You have dealt: ", std::to_string(sword->getAttackDamage())));
+				Writer::printEmpty(5);
+				Writer::printLine(Writer::append("Your Health: ", std::to_string(player.getHealth())));
+				Writer::printEmpty(5);
+				Writer::printLine(Writer::append("Enemy Health: ", std::to_string(player.getCurrentRoom()->getEnemy()->getHealth())));
+				Writer::printLongLine();
 			}
+		}
+
+		if (!player.getCurrentRoom()->getEnemy()->isAlive()) {
+			Writer::printLongLine();
+			Writer::printSpc();
+			Writer::printEmpty(5);
+			Writer::printLine(Writer::append("Your Health: ", std::to_string(player.getHealth())));
+			Writer::printEmpty(5);
+			Writer::printLine("You have eliminated your enemy!");
+			Writer::printLongLine();
+
+			player.getCurrentRoom()->killCurrentEnemy();
 		}
 	}
 	else {
@@ -375,6 +436,17 @@ void Game::attack(Command cmd) {
 }
 
 void Game::counterAttack() {
+	int damage = 10;
+	player.getCurrentRoom()->getEnemy()->attack(&this->player, damage);
 
+	Writer::printLongLine();
+	Writer::printSpc();
+	Writer::printEmpty(5);
+	Writer::printLine(Writer::append("Enemy has dealt: ", std::to_string(damage)));
+	Writer::printEmpty(5);
+	Writer::printLine(Writer::append("Your Health: ", std::to_string(player.getHealth())));
+	Writer::printEmpty(5);
+	Writer::printLine(Writer::append("Enemy Health: ", std::to_string(player.getCurrentRoom()->getEnemy()->getHealth())));
+	Writer::printLongLine();
 }
-*/
+

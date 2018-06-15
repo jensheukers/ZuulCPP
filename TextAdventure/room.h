@@ -32,6 +32,7 @@ public:
 	void setEnemy(Entity* enemy);
 	Entity* getEnemy();
 	bool hasEnemy();
+	void killCurrentEnemy();
 
 private:
 	bool locked = false;

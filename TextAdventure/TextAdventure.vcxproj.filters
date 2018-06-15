@@ -66,6 +66,12 @@
     <ClInclude Include="key.h">
       <Filter>Header Files\Items</Filter>
     </ClInclude>
+    <ClInclude Include="weapon.h">
+      <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="sword.h">
+      <Filter>Header Files\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
