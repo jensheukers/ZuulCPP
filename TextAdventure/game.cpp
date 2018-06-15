@@ -138,11 +138,13 @@ void Game::goRoom(Command cmd)
 
 void Game::grab(Command cmd) {
 	if (!cmd.hasSecondWord()) {
-		// if there is no second word, we don't know what to grab...
 		Writer::printLongLine();
 		Writer::printSpc();
-		Writer::printEmpty(5);
-		Writer::printLine("I dont know what to grab..");
+		for (int i = 0; i < player.getCurrentRoom()->getInventory()->getSize(); i++) {
+			player.getInventory()->addItem(player.getCurrentRoom()->getInventory()->getItem(i));
+			Writer::printEmpty(5);
+			Writer::printLine(Writer::append("You grabbed a: ", player.getCurrentRoom()->getInventory()->getItem(i)->getItemName()));	
+		}
 		Writer::printLongLine();
 		return;
 	}
@@ -189,9 +191,13 @@ void Game::consume(Command cmd) {
 			if (player.getInventory()->getItem(i)->getItemName() == "HealthPotion") {
 				int oldHealth = player.getHealth();
 				player.heal(20);
+				Writer::printLongLine();
+				Writer::printEmpty(5);
 				Writer::printLine("You drank a Health Potion");
 				Writer::printSpc();
+				Writer::printEmpty(5);
 				Writer::printLine(Writer::append(Writer::append("Health: ", std::to_string(oldHealth)), Writer::append(" >> ", std::to_string(player.getHealth()))));
+				Writer::printLongLine();
 				player.getInventory()->removeItem(i);
 			}
 			else {
@@ -248,7 +254,11 @@ bool Game::processCommand(Command cmd)
 	}
 
 	if(cmd.isUnknown()) {
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
 		Writer::printLine("I don't know what you mean...");
+		Writer::printLongLine();
 		return false;
 	}
 
