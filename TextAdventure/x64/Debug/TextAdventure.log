@@ -1,0 +1,16 @@
+﻿  stdafx.cpp
+  command.cpp
+  commandwords.cpp
+  entity.cpp
+  game.cpp
+  inventory.cpp
+c:\users\jensh\documents\git\zuulcs\textadventure\inventory.cpp(34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  item.cpp
+  parser.cpp
+  player.cpp
+  room.cpp
+  main.cpp
+  writer.cpp
+c:\users\jensh\documents\git\zuulcs\textadventure\writer.cpp(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Generating Code...
+  TextAdventure.vcxproj -> C:\Users\jensh\Documents\git\ZuulCS\x64\Debug\TextAdventure.exe
