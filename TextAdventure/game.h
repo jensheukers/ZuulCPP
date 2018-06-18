@@ -12,6 +12,7 @@
 #include "writer.h"
 #include "items.h"
 #include "enemys.h"
+#include "weapons.h"
 
 class Game
 {

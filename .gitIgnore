@@ -2,6 +2,6 @@
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
-*.vs
+.vs
 Debug
 x64

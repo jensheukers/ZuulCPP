@@ -69,12 +69,6 @@
     <ClInclude Include="key.h">
       <Filter>Header Files\Items</Filter>
     </ClInclude>
-    <ClInclude Include="weapon.h">
-      <Filter>Header Files\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="sword.h">
-      <Filter>Header Files\Items</Filter>
-    </ClInclude>
     <ClInclude Include="enemys.h">
       <Filter>Header Files\enemys</Filter>
     </ClInclude>
@@ -83,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="guard.h">
       <Filter>Header Files\enemys</Filter>
+    </ClInclude>
+    <ClInclude Include="weapons.h">
+      <Filter>Header Files\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
