@@ -1,4 +1,5 @@
-*.sln*
-*.vcxproj*
-*targetver.h*
+*.sln
+*.vcxproj
 Debug
+x64
+.vs
