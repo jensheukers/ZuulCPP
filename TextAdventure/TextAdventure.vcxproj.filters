@@ -60,13 +60,7 @@
     <ClInclude Include="writer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="healthpotion.h">
-      <Filter>Header Files\Items</Filter>
-    </ClInclude>
     <ClInclude Include="items.h">
-      <Filter>Header Files\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="key.h">
       <Filter>Header Files\Items</Filter>
     </ClInclude>
     <ClInclude Include="enemys.h">

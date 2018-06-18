@@ -12,7 +12,6 @@ protected:
 	std::string itemName = "Item";
 };
 
-
 class Key : public Item {
 public:
 	Key() {

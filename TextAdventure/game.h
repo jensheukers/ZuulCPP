@@ -5,14 +5,15 @@
 
 #include <string>
 
+#include "items.h"
+#include "weapons.h"
 #include "parser.h"
 #include "command.h"
 #include "room.h"
 #include "player.h"
 #include "writer.h"
-#include "items.h"
 #include "enemys.h"
-#include "weapons.h"
+
 
 class Game
 {

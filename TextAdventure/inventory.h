@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include "item.h"
+#include "items.h"
 class Inventory {
 private:
 	int maxWeight = 100000; //Default at 100k kg Max
