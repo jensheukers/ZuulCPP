@@ -154,7 +154,6 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="guard.h" />
     <ClInclude Include="inventory.h" />
-    <ClInclude Include="item.h" />
     <ClInclude Include="items.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="player.h" />

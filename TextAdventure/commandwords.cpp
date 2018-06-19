@@ -14,6 +14,7 @@ CommandWords::CommandWords()
 	validCommands.push_back("drop");
 	validCommands.push_back("clear");
 	validCommands.push_back("attack");
+	validCommands.push_back("equip");
 }
 
 CommandWords::~CommandWords()

@@ -35,13 +35,27 @@ private:
 	void clear();
 	void attack(Command cmd);
 	void counterAttack();
+	void equip(Command cmd);
 
 	Parser parser;
 	Player player;
 
 	Room* prisonCell;
-	Room* prisonCellBlock;
 	Room* prisonCellUnder;
+
+	Room* prisonCellBlockA;
+	Room* prisonCellBlockB;
+	Room* prisonCellBlockC;
+	Room* celSoap;
+
+	Room* cantina;
+
+	Room* playGround;
+	Room* armory;
+	Room* shower;
+
+	Room* wardenHallWay;
+	Room* wardenRoom;
 };
 
 #endif /* GAME_H */

@@ -19,29 +19,53 @@ void Game::createRooms()
 {
 	// create the rooms
 	prisonCell = new Room("in your prison cell.");
-	prisonCellBlock = new Room("in the prison block hall");
 	prisonCellUnder = new Room("in a room underneath your prison bed");
+
+	prisonCellBlockA = new Room("in prison block A");
+	prisonCellBlockB = new Room("in prison block B");
+	prisonCellBlockC = new Room("in prison block C");
+	celSoap = new Room("in Jeffery his cel");
+	cantina = new Room("in the cantina");
+	shower = new Room("in the shower");
+
 
 	// initialise room exits
 	prisonCell->setExit("down", prisonCellUnder);
-	prisonCell->setExit("left", prisonCellBlock);
+	prisonCell->setExit("right", prisonCellBlockA);
 
 	prisonCellUnder->setExit("up", prisonCell);
 
-	prisonCellBlock->setExit("right", prisonCell);
+	prisonCellBlockA->setExit("left", prisonCell);
+	prisonCellBlockA->setExit("right", prisonCellBlockB);
+	prisonCellBlockB->setExit("left", prisonCellBlockA);
+	prisonCellBlockB->setExit("right", prisonCellBlockC);
+	prisonCellBlockB->setExit("cantina",cantina);
+	prisonCellBlockC->setExit("left", prisonCellBlockB);
+	prisonCellBlockC->setExit("right", celSoap);
+	cantina->setExit("CellBlock", prisonCellBlockB);
+	celSoap->setExit("left",prisonCellBlockC);
 
 	//Lock the rooms that need to be locked
-	prisonCellBlock->setRequiredKey(new Key());
-	prisonCellBlock->setLock(true);
+	prisonCellBlockA->setRequiredKey(new Key());
+	prisonCellBlockA->setLock(true);
+
+	cantina->setRequiredKey(new Key());
+	cantina->setLock(true);
 
 	//Set room Inventory
 	prisonCellUnder->getInventory()->addItem(new Key());
 	prisonCellUnder->getInventory()->addItem(new HealthPotion());
-	prisonCell->getInventory()->addItem(new Sword());
+	prisonCellUnder->getInventory()->addItem(new HealthPotion());
+	prisonCellUnder->getInventory()->addItem(new Sword());
+	prisonCell->getInventory()->addItem(new Wrench());
+	prisonCellBlockA->getInventory()->addItem(new HealthPotion());
+
+	celSoap->getInventory()->addItem(new Soap());
 
 	//Set room enemy's
 	prisonCellUnder->setEnemy(new Roamer());
-	prisonCellBlock->setEnemy(new Guard());
+	prisonCellBlockA->setEnemy(new Guard());
+	prisonCellBlockC->setEnemy(new Guard());
 
 	this->player.setCurrentRoom(prisonCell);  // start game outside
 
@@ -150,7 +174,7 @@ void Game::grab(Command cmd) {
 	if (!cmd.hasSecondWord()) {
 		Writer::printLongLine();
 		Writer::printSpc();
-		for (int i = 0; i < player.getCurrentRoom()->getInventory()->getSize(); i++) {
+		for (int i = player.getCurrentRoom()->getInventory()->getSize() - 1; i > -1; i--) {
 			if (player.getInventory()->addItem(player.getCurrentRoom()->getInventory()->getItem(i))) {
 				Writer::printEmpty(5);
 				Writer::printLine(Writer::append("You grabbed a: ", player.getCurrentRoom()->getInventory()->getItem(i)->getItemName()));
@@ -237,6 +261,18 @@ void Game::drop(Command cmd) {
 
 	for (int i = 0; i < player.getInventory()->getSize(); i++) {
 		if (cmd.getSecondWord() == player.getInventory()->getItem(i)->getItemName()) {
+			
+			if (cmd.getSecondWord() == "Soap" && player.getCurrentRoom() == shower) {
+				Writer::printLongLine();
+				Writer::printSpc();
+				Writer::printEmpty(5);
+				Writer::printLine("Jeffery: hey there you dropped my soap ;)");
+				Writer::printEmpty(5);
+				Writer::printLine("Jeffery: now you gonna get what you deserve");
+				player.damage(100);
+				Writer::printLongLine();
+			}
+
 			player.getCurrentRoom()->getInventory()->addItem(player.getInventory()->getItem(i));
 			player.getInventory()->removeItem(i);
 
@@ -257,13 +293,9 @@ bool Game::processCommand(Command cmd)
 	bool wantToQuit = false;
 
 	if (!player.isAlive()) {
-		Writer::printLongLine();
-		Writer::printSpc();
-		Writer::printEmpty(5);
-		Writer::printLine("Player has died!");
-		Writer::printLongLine();
-		return wantToQuit;
+		return true;
 	}
+
 
 	if(cmd.isUnknown()) {
 		Writer::printLongLine();
@@ -360,6 +392,17 @@ bool Game::processCommand(Command cmd)
 			this->counterAttack();
 		}
 	}
+	else if (commandWord.compare("equip") == 0) {
+		this->equip(cmd);
+	}
+
+	if (!player.isAlive()) {
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
+		Writer::printLine("Player has died! press any key to quit");
+		Writer::printLongLine();
+	}
 
 	return wantToQuit;
 }
@@ -409,7 +452,7 @@ void Game::clear() {
 
 void Game::attack(Command cmd) {
 	if (player.getCurrentRoom()->hasEnemy()) {
-		if (!cmd.hasSecondWord()) {
+		if (player.getCurrentEquiped() == nullptr) {
 			// if there is no second word, we use fists
 			player.attack(player.getCurrentRoom()->getEnemy(), 5);
 			Writer::printLongLine();
@@ -426,21 +469,22 @@ void Game::attack(Command cmd) {
 			Writer::printLongLine();
 		}
 		else {
-			std::string weaponString = cmd.getSecondWord();
+			std::string weaponString = player.getCurrentEquiped()->getItemName();
 
 			//Check the inventory for the weapon
 			bool weaponFound = false;
 			for (int i = 0; i < player.getInventory()->getSize(); i++) {
 				if (player.getInventory()->getItem(i)->getItemName() == weaponString) {
-					Weapon* sword = dynamic_cast<Weapon*>(player.getInventory()->getItem(i));
-					player.attack(player.getCurrentRoom()->getEnemy(), sword->getAttackDamage());
+					Weapon* weapon = dynamic_cast<Weapon*>(player.getInventory()->getItem(i));
+					int damage = rand() % weapon->getAttackDamageMax() + weapon->getAttackDamageMin();
+					player.attack(player.getCurrentRoom()->getEnemy(), damage);
 					Writer::printLongLine();
 					Writer::printSpc();
 					Writer::printEmpty(5);
-					Writer::printLine(sword->getRandomAttackPhrase());
+					Writer::printLine(weapon->getRandomAttackPhrase());
 					Writer::printSpc();
 					Writer::printEmpty(5);
-					Writer::printLine(Writer::append("You have dealt: ", std::to_string(sword->getAttackDamage())));
+					Writer::printLine(Writer::append("You have dealt: ", std::to_string(damage)));
 					Writer::printEmpty(5);
 					Writer::printLine(Writer::append("Your Health: ", std::to_string(player.getHealth())));
 					Writer::printEmpty(5);
@@ -496,3 +540,48 @@ void Game::counterAttack() {
 	Writer::printLongLine();
 }
 
+void Game::equip(Command cmd) {
+	if (!cmd.hasSecondWord()) {
+		Writer::printLongLine();
+		Writer::printSpc();
+		Writer::printEmpty(5);
+		Writer::printLine("Equip what?");
+		Writer::printLongLine();
+	}
+	else {
+		//check if player has the item
+		bool itemFound = false;
+		for (int i = 0; i < player.getInventory()->getSize(); i++) {
+			if (player.getInventory()->getItem(i)->getItemName() == cmd.getSecondWord()) {
+				//Check if item is weapon
+				if (player.getInventory()->getItem(i)->getType() == "weapon") {
+					itemFound = true;
+					player.setCurrentEquiped(player.getInventory()->getItem(i));
+
+					Writer::printLongLine();
+					Writer::printSpc();
+					Writer::printEmpty(5);
+					Writer::printLine(Writer::append("You have equipped a: ", player.getCurrentEquiped()->getItemName()));
+					Writer::printLongLine();
+				}
+				else {
+					Writer::printLongLine();
+					Writer::printSpc();
+					Writer::printEmpty(5);
+					Writer::printLine(Writer::append(cmd.getSecondWord(), " is not a weapon!"));
+					Writer::printLongLine();
+					return;
+				}
+			}
+		}
+
+		if (!itemFound) {
+			Writer::printLongLine();
+			Writer::printSpc();
+			Writer::printEmpty(5);
+			Writer::printLine(Writer::append("You dont have a: ",cmd.getSecondWord()));
+			Writer::printLongLine();
+			return;
+		}
+	}
+}

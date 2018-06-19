@@ -5,11 +5,16 @@ public:
 	Weapon() {
 		itemName = "Weapon";
 		weight = 5;
+		type = "weapon";
 	};
 
-	int getAttackDamage() {
-		return this->attackDamage;
+	int getAttackDamageMax() {
+		return this->attackDamageMax;
 	}
+	int getAttackDamageMin() {
+		return  this->attackDamageMin;
+	}
+
 	std::string getRandomAttackPhrase() {
 		int randChosen = rand() % attackPhrases.size();
 
@@ -17,14 +22,16 @@ public:
 	};
 
 protected:
-	int attackDamage = 0;
+	int attackDamageMax = 0;
+	int attackDamageMin = 0;
 	std::vector<std::string>attackPhrases;
 };
 
 class Sword : public Weapon {
 public:
 	Sword() {
-		attackDamage = 29;
+		attackDamageMax = 35;
+		attackDamageMin = 20;
 		itemName = "Sword";
 		weight = 10;
 		attackPhrases.push_back("You stabbed the enemy in the chest");
@@ -36,11 +43,12 @@ public:
 class Wrench : public Weapon {
 public:
 	Wrench() {
-		attackDamage = 29;
+		attackDamageMax = 20;
+		attackDamageMin = 7;
 		itemName = "Wrench";
 		weight = 10;
-		attackPhrases.push_back("You stabbed the enemy in the chest");
-		attackPhrases.push_back("You ran around the enemy then stabbed him in the back");
-		attackPhrases.push_back("You threw your sword right in the enemy's eye.");
+		attackPhrases.push_back("You punched the enemy with the wrench");
+		attackPhrases.push_back("You jumped in the air and hit the enemy on his head");
+		attackPhrases.push_back("You poked the enemy with your wrench");
 	};
 };

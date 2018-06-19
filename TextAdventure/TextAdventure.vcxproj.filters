@@ -54,9 +54,6 @@
     <ClInclude Include="inventory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="item.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="writer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
