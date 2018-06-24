@@ -4,17 +4,26 @@
 #include <string>
 #include "game.h"
 
+/**
+* Constructor
+*/
 Game::Game()
 {
 	this->player.setCurrentRoom(NULL);
 	this->createRooms();
 }
 
+/**
+* Destructor
+*/
 Game::~Game()
 {
 
 }
 
+/**
+* Create all the rooms, and set them up properly
+*/
 void Game::createRooms()
 {
 	// create the rooms
@@ -72,6 +81,9 @@ void Game::createRooms()
 	
 }
 
+/**
+* Start the game.
+*/
 void Game::play()
 {
 	this->printWelcome();
@@ -86,6 +98,9 @@ void Game::play()
 	}
 }
 
+/**
+* Sends the player to the room given if it exists, and if player has no enemy.
+*/
 void Game::goRoom(Command cmd)
 {
 	if (player.getCurrentRoom()->hasEnemy()) {
@@ -161,6 +176,9 @@ void Game::goRoom(Command cmd)
 	}
 }
 
+/**
+* Grabs given item if it can be found in the room
+*/
 void Game::grab(Command cmd) {
 	if (player.getCurrentRoom()->hasEnemy()) {
 		Writer::printLongLine();
@@ -210,6 +228,9 @@ void Game::grab(Command cmd) {
 	return;
 }
 
+/**
+* Comsumes the said Item if available
+*/
 void Game::consume(Command cmd) {
 	Writer::printLongLine();
 	Writer::printSpc();
@@ -248,6 +269,10 @@ void Game::consume(Command cmd) {
 	Writer::printLongLine();
 }
 
+
+/**
+* Drops the given Item, if in inventory
+*/
 void Game::drop(Command cmd) {
 	if (!cmd.hasSecondWord()) {
 		// if there is no second word, we don't know what to drop...
@@ -288,6 +313,9 @@ void Game::drop(Command cmd) {
 	return;
 }
 
+/**
+* Processes the given commmand
+*/
 bool Game::processCommand(Command cmd)
 {
 	bool wantToQuit = false;
@@ -407,6 +435,9 @@ bool Game::processCommand(Command cmd)
 	return wantToQuit;
 }
 
+/**
+* Prints the welcome message.
+*/
 void Game::printWelcome()
 {
 	std::cout << std::endl;
@@ -423,6 +454,9 @@ void Game::printWelcome()
 	Writer::printLongLine();
 }
 
+/**
+* Prints all the commands to the screen
+*/
 void Game::printHelp()
 {
 	/*std::cout << "You are lost. You are alone. You wander" << std::endl;
@@ -450,6 +484,9 @@ void Game::clear() {
 	system("cls");
 }
 
+/**
+* Attack the current enemy in the current room, with equipped Weapon
+*/
 void Game::attack(Command cmd) {
 	if (player.getCurrentRoom()->hasEnemy()) {
 		if (player.getCurrentEquiped() == nullptr) {
@@ -525,6 +562,9 @@ void Game::attack(Command cmd) {
 	}
 }
 
+/**
+* If currentroom has enemy, it will do a counter attack on player.
+*/
 void Game::counterAttack() {
 	int damage = rand() % player.getCurrentRoom()->getEnemy()->getMaxDamage() + player.getCurrentRoom()->getEnemy()->getMinDamage();
 	player.getCurrentRoom()->getEnemy()->attack(&this->player, damage);
@@ -540,6 +580,9 @@ void Game::counterAttack() {
 	Writer::printLongLine();
 }
 
+/**
+* Equip said weapon if in players inventory.
+*/
 void Game::equip(Command cmd) {
 	if (!cmd.hasSecondWord()) {
 		Writer::printLongLine();
