@@ -1,6 +1,6 @@
-*.sln*
-*.vcxproj*
-*targetver.h*
+*.sln
+*.vcxproj
+*targetver.h
 Debug
 latex
 x64
