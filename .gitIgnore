@@ -1,7 +1,6 @@
-*.sln
-*.vcxproj
-*.vcxproj.filters
-*.vcxproj.user
-.vs
+*.sln*
+*.vcxproj*
+*targetver.h*
 Debug
+latex
 x64
