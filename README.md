@@ -4,8 +4,8 @@
 
 # How to play
 
-  1. Use Cmake to make a suitable project for your specific OS.
-  2. Compile the source code.
+  1. Download the source code.
+  2. Compile.
   3. Play!
 
 # License
