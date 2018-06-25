@@ -1,5 +1,5 @@
-# ZuulCS
-  ZuulCS is a epic 2D Text Adventure that has been made by Jens Heukers for a school project 
+# ZuulCPP
+  ZuulCPP is a epic 2D Text Adventure that has been made by Jens Heukers for a school project 
   on Alfa-College Game Architecture & Design
 
 # How to play
