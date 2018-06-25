@@ -1,6 +1,7 @@
 *.sln
 *.vcxproj
 *targetver.h
+.vs/
 Debug
 latex
 x64
