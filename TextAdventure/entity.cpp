@@ -16,8 +16,10 @@ void Entity::damage(int amount) {
 * Heal the entity
 */
 void Entity::heal(int amount) {
-	if (this->health < 100) {
-		this->health += amount;
+	this->health += amount;
+
+	if (this->health > 100) {
+		this->health = 100;
 	}
 }
 

@@ -1,5 +1,7 @@
 #include "stdafx.h"
-#include "writer.h";
+#include "writer.h"
+#include <ctime>
+#include <vector>
 
 void Writer::printLine(std::string line) {
 	std::cout << line << std::endl;
