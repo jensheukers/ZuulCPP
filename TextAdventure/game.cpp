@@ -34,7 +34,6 @@ void Game::createRooms()
 	prisonCellBlockB = new Room("in prison block B");
 	prisonCellBlockC = new Room("in prison block C");
 	celSoap = new Room("in Jeffery his cel");
-	cantina = new Room("in the cantina");
 	shower = new Room("in the shower");
 
 
@@ -48,18 +47,15 @@ void Game::createRooms()
 	prisonCellBlockA->setExit("right", prisonCellBlockB);
 	prisonCellBlockB->setExit("left", prisonCellBlockA);
 	prisonCellBlockB->setExit("right", prisonCellBlockC);
-	prisonCellBlockB->setExit("cantina",cantina);
 	prisonCellBlockC->setExit("left", prisonCellBlockB);
 	prisonCellBlockC->setExit("right", celSoap);
-	cantina->setExit("CellBlock", prisonCellBlockB);
+	prisonCellBlockC->setExit("up",shower);
 	celSoap->setExit("left",prisonCellBlockC);
+	shower->setExit("down",prisonCellBlockB);
 
 	//Lock the rooms that need to be locked
 	prisonCellBlockA->setRequiredKey(new Key());
 	prisonCellBlockA->setLock(true);
-
-	cantina->setRequiredKey(new Key());
-	cantina->setLock(true);
 
 	//Set room Inventory
 	prisonCellUnder->getInventory()->addItem(new Key());
@@ -291,9 +287,9 @@ void Game::drop(Command cmd) {
 				Writer::printLongLine();
 				Writer::printSpc();
 				Writer::printEmpty(5);
-				Writer::printLine("Jeffery: hey there you dropped my soap ;)");
+				Writer::printLine("You fool");
 				Writer::printEmpty(5);
-				Writer::printLine("Jeffery: now you gonna get what you deserve");
+				Writer::printLine("You dropped the soap!");
 				player.damage(100);
 				Writer::printLongLine();
 			}
@@ -428,7 +424,7 @@ bool Game::processCommand(Command cmd)
 		Writer::printLongLine();
 		Writer::printSpc();
 		Writer::printEmpty(5);
-		Writer::printLine("Player has died! press any key to quit");
+		Writer::printLine("Player has died! press enter to quit");
 		Writer::printLongLine();
 	}
 
